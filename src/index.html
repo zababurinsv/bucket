@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <title>Backet</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+</head>
+<body>
+<noscript>
+    Включите потдержку скриптов
+</noscript>
+<fieldset>
+    <legend>main form</legend>
+    test
+</fieldset>
+<fieldset>
+    <legend>Bucket</legend>
+    test
+</fieldset>
+</body>
+
+<script type="module">
+    import {events} from 'z-events'
+    import {tests} from 'z-events'
+    events.await('/get_data', (event) => {
+        event.call(true)
+    })
+    tests('https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs')
+</script>
+<style> @import url("./index.scss");</style>
+</html>
