@@ -9,23 +9,34 @@
 <noscript>
     Включите потдержку скриптов
 </noscript>
-<fieldset>
+<fieldset class="-views">
     <legend>main form</legend>
     test
 </fieldset>
-<fieldset>
+<fieldset class="-backet">
     <legend>Bucket</legend>
     test
 </fieldset>
 </body>
 
 <script type="module">
-    import {events} from 'z-events'
-    import {tests} from 'z-events'
-    events.await('/get_data', (event) => {
-        event.call(true)
-    })
-    tests('https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs')
+    import listener from './listener.mjs'
+    import { tests } from 'z-events'
+    let docs = {
+        views: {
+            parent: document.body.querySelector('.-views')
+        },
+        backet: {
+            parent: document.body.querySelector('.-backet')
+        },
+        worker: undefined
+    };
+    tests('https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs');
+
+    (async () => {
+        docs.worker = new Worker(new URL('./worker.mjs', import.meta.url), { type: "module" })
+        await listener(docs)
+    })()
 </script>
 <style> @import url("./index.scss");</style>
 </html>

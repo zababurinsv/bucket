@@ -12,8 +12,6 @@ workerFS.then(async (Module)=> {
     files: files,
     blobs: []
   }, '/data');
-
-  // console.log('wfs', FS)
 })
 
 self.onmessage = (events) => {
@@ -21,18 +19,18 @@ self.onmessage = (events) => {
   self.postMessage("Got it");
 }
 
-// function factorial(num){
-//   for(var i = num - 1; i > 0; i--){
-//     num *= i;
-//   }
-//   return num;
-// }
-// let count = 0
-// let timerId = setTimeout(function tick() {
-//   factorial(1000000000)
-//   self.postMessage({
-//     tick: count
-//   });
-//   count = (count === 100) ? 0 : count + 1
-//   timerId = setTimeout(tick, 80);
-// }, 80);
+function factorial(num){
+  for(var i = num - 1; i > 0; i--){
+    num *= i;
+  }
+  return num;
+}
+
+let count = 0
+let timerId = setTimeout(function tick() {
+  self.postMessage({
+    tick: count
+  });
+  count = (count === 100) ? 0 : count + 1
+  timerId = setTimeout(tick, 1000);
+}, 1000);
