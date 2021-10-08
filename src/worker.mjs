@@ -32,5 +32,5 @@ let timerId = setTimeout(function tick() {
     tick: count
   });
   count = (count === 100) ? 0 : count + 1
-  timerId = setTimeout(tick, 1000);
-}, 1000);
+  timerId = setTimeout(tick, 15000);
+}, 15000);

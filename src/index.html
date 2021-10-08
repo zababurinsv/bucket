@@ -11,32 +11,46 @@
 </noscript>
 <fieldset class="-views">
     <legend>main form</legend>
-    test
+    <div  class="-views__container"></div>
 </fieldset>
 <fieldset class="-backet">
     <legend>Bucket</legend>
-    test
+   <div  class="-backet__container"></div>
 </fieldset>
 </body>
-
+<template id="items">
+     <div class="item">
+         
+     </div>
+</template>
 <script type="module">
-    import listener from './listener.mjs'
-    import { tests } from 'z-events'
-    let docs = {
+   import listener from './listener.mjs'
+   if('content' in document.createElement('template')) {
+   let template = document.querySelector('#items')
+   let docs = {
         views: {
-            parent: document.body.querySelector('.-views')
+            parent: document.body.querySelector('.-views'),
+            container:  document.body.querySelector('.-views__container')
         },
         backet: {
-            parent: document.body.querySelector('.-backet')
+            parent: document.body.querySelector('.-backet'),
+            container: document.body.querySelector('.-backet__container')
         },
-        worker: undefined
+        worker: undefined,
+        template: {
+            item: document.querySelector('#item'),
+            get: async () => { return template.content.cloneNode(true)  }
+        }
     };
-    tests('https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs');
-
-    (async () => {
-        docs.worker = new Worker(new URL('./worker.mjs', import.meta.url), { type: "module" })
-        await listener(docs)
+    (async () =>  {
+         let manager = await import("https://zababurinsv.github.io/z-events/index.min.mjs");
+         manager.tests("https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs");
+         docs.worker = new Worker(new URL('./worker.mjs', import.meta.url), { type: "module" });
+         await listener(docs);
     })()
+   } else {
+        console.warn('нет атрибута content у элемента template')
+   }
 </script>
-<style> @import url("./index.scss");</style>
+ <style> @import url("./index.css");</style> 
 </html>

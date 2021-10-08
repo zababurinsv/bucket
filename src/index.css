@@ -1,0 +1,15 @@
+.-views  {
+   background: azire;
+}
+
+.-views__container {
+    display: grid;
+}
+
+.-backet {
+    background: silver;
+}
+
+.-backet__container {
+    display: grid;
+}
