@@ -6,10 +6,12 @@
     display: grid;
 }
 
-.-backet {
+.-bucket {
     background: silver;
 }
 
-.-backet__container {
+.-bucket__container {
     display: grid;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    grid-template-rows: 5vw 5vw 5vw 5vw 5vw
 }

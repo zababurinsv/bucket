@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>Backet</title>
+    <title>Bucket</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
@@ -13,35 +13,51 @@
     <legend>main form</legend>
     <div  class="-views__container"></div>
 </fieldset>
-<fieldset class="-backet">
+<fieldset class="-bucket">
     <legend>Bucket</legend>
-   <div  class="-backet__container"></div>
+   <div  class="-bucket__container"></div>
 </fieldset>
-</body>
-<template id="items">
-     <div class="item">
-         
-     </div>
-</template>
+
+<template id="items"> 
+      <div class="item"> 
+             item 1  
+      </div> 
+ </template>
+</body> 
 <script type="module">
    import listener from './listener.mjs'
    if('content' in document.createElement('template')) {
    let template = document.querySelector('#items')
    let docs = {
         views: {
-            parent: document.body.querySelector('.-views'),
-            container:  document.body.querySelector('.-views__container')
+            parent: document.querySelector('.-views'),
+            container:  document.querySelector('.-views__container')
         },
-        backet: {
-            parent: document.body.querySelector('.-backet'),
-            container: document.body.querySelector('.-backet__container')
+        bucket: {
+            parent: document.querySelector('.-bucket'),
+            container: document.querySelector('.-bucket__container')
         },
-        worker: undefined,
+        get: {
+            template: {
+                bucket:  async (props) => { 
+                  let item  = template.content.cloneNode(true) 
+                   let container = item.querySelector('.item')
+                   container.classList.add(`item_${props.position}`)
+                   for(let i =0; i < props.colums; i++) {
+                        let child = document.createElement('div')
+                        child.textContent = i
+                        container.appendChild(child)
+                   } 
+                    return item 
+                 }
+             }
+        },
         template: {
-            item: document.querySelector('#item'),
-            get: async () => { return template.content.cloneNode(true)  }
-        }
+            bucket: document.querySelector('#item'),
+        },
+        worker: undefined
     };
+    
     (async () =>  {
          let manager = await import("https://zababurinsv.github.io/z-events/index.min.mjs");
          manager.tests("https://zababurinsv.github.io/tests/07_10_2021/test_07_10_2021.index.mjs");
@@ -49,6 +65,8 @@
          await listener(docs);
     })()
    } else {
+      //  let manager = await import("https://zababurinsv.github.io/z-events/index.min.mjs");
+      // manager.devTool()
         console.warn('нет атрибута content у элемента template')
    }
 </script>
