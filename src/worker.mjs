@@ -1,6 +1,7 @@
+import api from './api.mjs'
 import FS from './fs/main.mjs'
 import wasm from './fs/wasmBinary.mjs'
-import api from './fs/api.mjs'
+import api from './api.mjs'
 let container = null ;
 let files = null;
 let workerFS = FS({ wasmBinary: wasm })
@@ -25,7 +26,7 @@ function factorial(num){
   }
   return num;
 }
-
+console.log('@@@@@@@',  api)
 let count = 0
 let timerId = setTimeout(function tick() {
   self.postMessage({
