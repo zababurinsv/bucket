@@ -65,5 +65,5 @@ let timerId = setTimeout(async function tick() {
     });
   }
   count = (count === 100) ? 0 : count + 1
-  timerId = setTimeout(tick, 13323000);
+  timerId = setTimeout(tick, 5000);
 }, 0);
