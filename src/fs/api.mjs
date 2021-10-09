@@ -169,10 +169,11 @@ export default (fs = {}) => {
       writeFile: (file, contents) => {
         return new Promise(async (resolve, reject) => {
           try {
+           let writeFile =  await fs.writeFile(file, contents)
             resolve({
               status: true,
               success: true,
-              message: await fs.writeFile(file, contents)
+              message: writeFile
             })
           }catch (e) {
             resolve({

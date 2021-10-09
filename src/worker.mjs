@@ -1,9 +1,23 @@
-import api from './api.mjs'
+import api from './fs/api.mjs'
 import FS from './fs/main.mjs'
 import wasm from './fs/wasmBinary.mjs'
-import api from './api.mjs'
-let container = null ;
+import ApiBack from './api.mjs'
 let files = null;
+let isSend = true
+let course = {
+  current: 80,
+  change: 0
+}
+/**
+ * factorial
+ */
+function heavyComputation (num) {
+  for(let i = num - 1; i > 0; i--){
+    num *= i;
+  }
+  return num;
+}
+
 let workerFS = FS({ wasmBinary: wasm })
 workerFS.then(async (Module)=> {
   let FS = Module.FS
@@ -15,23 +29,41 @@ workerFS.then(async (Module)=> {
   }, '/data');
 })
 
-self.onmessage = (events) => {
-  console.log(events)
+self.onmessage = async (events) => {
+  switch (events.data.type) {
+    case 'modal':
+      isSend = events.data.isSend
+      break
+    case 'course':
+      isSend = false
+      course = await ApiBack.set.course(events.data.course)
+      isSend = true
+      break
+    case 'resetChange':
+      isSend = false
+      await ApiBack.reset.courseChange()
+      isSend = true
+      break
+    default:
+      console.warn('неопределён тип события', events.data)
+      break
+  }
+  if(events.data.isSend)
+  console.log(events.data)
   self.postMessage("Got it");
 }
 
-function factorial(num){
-  for(var i = num - 1; i > 0; i--){
-    num *= i;
-  }
-  return num;
-}
-console.log('@@@@@@@',  api)
 let count = 0
-let timerId = setTimeout(function tick() {
-  self.postMessage({
-    tick: count
-  });
+let timerId = setTimeout(async function tick() {
+  if(isSend) {
+    let result = await ApiBack.get.products()
+    self.postMessage({
+      tick: count,
+      isSend: isSend,
+      data: result,
+      course: course.change
+    });
+  }
   count = (count === 100) ? 0 : count + 1
-  timerId = setTimeout(tick, 15000);
-}, 15000);
+  timerId = setTimeout(tick, 1000);
+}, 0);
