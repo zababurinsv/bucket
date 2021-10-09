@@ -3,8 +3,8 @@
   "version": "1.0.0",
   "description": "task manager for async events",
   "source": "./src/index.mjs",
-  "module": "./dist/index.mjs",
   "author": "Zababurin Sergey",
+  "module": "./dist/index.mjs",
   "license": "GPL-3.0-only",
   "private": true,
   "config": {
