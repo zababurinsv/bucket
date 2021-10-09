@@ -42,7 +42,16 @@ let clickListener = (event) => {
             timerId = clearTimeout(timerId)
             let parent = await parentNode(event,'-products__container-item__details_item')
             if(!parent.isParent) {
-                self.get.template.cart()
+                let name = parent.parent.querySelector('.-products__container-item__details_item_name')
+                let price = parent.parent.querySelector('.-products__container-item__details_item_price')
+                let available = parent.parent.querySelector('.-products__container-item__details_item_available')
+                price = parseFloat(price.textContent)
+                available = parseFloat(available.textContent)
+                self.get.template.cart({
+                    name: name.textContent,
+                    price: price,
+                    available: available
+                })
             }
         }, 200);
     } else {

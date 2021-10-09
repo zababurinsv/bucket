@@ -47,12 +47,24 @@ body {
 
 #panel {
     background: azure;
-    width: 9vw;
+    width: min-content;
     margin: 0.5vw;
 }
+
+#panel_course {
+    width: 12vw;
+}
+
+#panel_course::placeholder {
+    font-size: 1vw;
+}
+
 form {
     display: flex;
-    width: 20vw;
+}
+
+.course__button {
+    font-size: 1vw;
 }
 
 .course {
@@ -69,6 +81,18 @@ form {
     width: 98vw;
 }
 
+.-cart__footer {
+    display: flex;
+    flex-direction: row;
+    justify-content: right;
+    box-sizing: border-box;
+    padding: 1vw;
+}
+
+.-cart__footer_total_price::after {
+    content: " Rub";
+}
+
 #mocha-stats {
     top: 1vw!important;
 }
@@ -76,6 +100,7 @@ form {
 summary {
     box-sizing: border-box;
     padding: 0.5vw;
+    font-size: 1.5vw;
 }
 
 .-products, .-cart {
@@ -106,6 +131,7 @@ summary {
     justify-content: space-between;
     flex-grow: 1;
     flex-wrap: wrap;
+    font-size: 1vw;
 }
 
 .-products__container-item__details_item_wrapper {
@@ -158,7 +184,7 @@ summary {
     box-sizing: border-box;
     padding: 1vw;
     border-bottom: 0.2vw solid rgba(0, 0, 0, 0.33);
-    font-size: 2vw;
+    font-size: 1.5vw;
 }
 
 .-cart__container_item_name {

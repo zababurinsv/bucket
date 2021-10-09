@@ -96,8 +96,14 @@ if('content' in document.createElement('template')) {
                     return true
                 },
                 cart: async (props) => {
-                    let cart  = cart.content.cloneNode(true)
-                    return cart
+                    let item  = cart.content.cloneNode(true)
+                    let name = item.querySelector('.cart__container_item_name')
+                    let amount = item.querySelector('.cart__container_item_amount')
+                    let remove = item.querySelector('.cart__container_item_remove')
+                    let price = item.querySelector('.cart__container_item_price')
+
+                    name.textContent = props.name
+                    return item
                 },
                 modal: async (element) => {
                     docs.modal.edit.innerHTML = ''
