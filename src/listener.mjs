@@ -142,7 +142,7 @@ let worker = (docs = { }) => {
         docs.worker.onmessage = msg => {
             if(msg.data.isSend) {
                 self.course.current.textContent = ''
-                self.course.current.textContent = msg.data.course.current
+                self.course.current.textContent = `текущий курс: ${msg.data.course.current}`
                 template("products", docs, {
                  data: msg.data.data,
                  change: parseFloat(msg.data.course.change)
