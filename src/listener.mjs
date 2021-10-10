@@ -74,7 +74,7 @@ let showModal = (event) => {
 
 }
 
-let clickListener = (event) => {
+let addToCart = (event) => {
     event.preventDefault()
     self.worker.postMessage({isSend: false, type: "update"})
     if (!timerId) {
@@ -127,6 +127,7 @@ let changeCourse = (event) => {
     if(self.course.usd.value < 20 || self.course.usd.value > 80) {
         alert("Курс должен быть не наже 20 и не выше 80 рублей");
     } else {
+        self.course.status.textContent = 'Курс обновится в течении 15 секунд'
         self.worker.postMessage({
             type:"change-course",
             course: self.course.usd.value,
@@ -143,6 +144,11 @@ let worker = (docs = { }) => {
             if(msg.data.isSend) {
                 self.course.current.textContent = ''
                 self.course.current.textContent = `текущий курс: ${msg.data.course.current}`
+                if(parseFloat(msg.data.course.change) !== 0) {
+                    self.course.status.textContent = 'Если курс не изменится за 15 секунд цвет станет белым'
+                } else {
+                    self.course.status.textContent = ''
+                }
                 template("products", docs, {
                  data: msg.data.data,
                  change: parseFloat(msg.data.course.change)
@@ -172,13 +178,13 @@ let modal = (docs) => {
 
 let product = (docs) => {
     let item = docs.querySelector('.-products__container-item__details_item')
-    item.addEventListener('click', clickListener)
+    item.addEventListener('click', addToCart)
     item.addEventListener('dblclick', doubleClickListener );
 }
 
 let terminate = (items) => {
     for(let item of items) {
-      item.removeEventListener('click', clickListener);
+      item.removeEventListener('click', addToCart);
       item.removeEventListener('dblclick', doubleClickListener );
     }
 }

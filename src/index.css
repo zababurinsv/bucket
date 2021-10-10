@@ -58,8 +58,14 @@ body {
 #panel {
     display: flex;
     background: azure;
-    width: min-content;
+    width: max-content;
     margin: 0.5vw;
+}
+
+.course__status {
+    align-self: center;
+    box-sizing: border-box;
+    padding: 0.5vw;
 }
 
 #panel_course {

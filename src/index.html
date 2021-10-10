@@ -25,6 +25,7 @@
         <button class="course__button">Submit</button>
     </form>
     <div class="course__current"> 80</div>
+    <div class="course__status"></div>
 </div>
 
 <fieldset class="-products">
@@ -110,7 +111,8 @@
         let docs = {
             course: {
                 usd: document.querySelector('#panel_course'),
-                current: document.querySelector('.course__current')
+                current: document.querySelector('.course__current'),
+                status: document.querySelector('.course__status')
             },
             create: {
                 group: async (name) => {
