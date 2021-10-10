@@ -24,15 +24,25 @@ let parentNode = async (event, type) => {
 let timerId = null;
 
 let closeModal = (event) => {
+    event.preventDefault()
     self.modal.window.close()
+    self.modal.background.style.display = "none"
     self.worker.postMessage({isSend: true, type: "modal"})
 }
 
 let saveModal = (event) => {
+    event.preventDefault()
     self.modal.window.close()
+    self.modal.background.style.display = "none"
     events.send('/save_modal', { }, (event) => {
         self.worker.postMessage({isSend: true, type: "modal"})
     })
+}
+
+let showModal = (event) => {
+    self.modal.background.style.display = "block"
+    self.modal.window.show()
+
 }
 
 let clickListener = (event) => {
@@ -53,7 +63,7 @@ let clickListener = (event) => {
                     available: available
                 })
             }
-        }, 200);
+        }, 400);
     } else {
         timerId = clearTimeout(timerId)
     }
@@ -68,7 +78,7 @@ let doubleClickListener = async (event) => {
             target: event.target,
             parentNode: parent
         })
-        self.modal.window.show()
+        showModal()
     }
 }
 
@@ -108,6 +118,7 @@ let modal = (docs) => {
     self = docs
     docs.modal.close.addEventListener('click', closeModal)
     docs.modal.save.addEventListener('click', saveModal)
+    docs.modal.background.addEventListener('click', closeModal)
 }
 
 let product = (docs) => {

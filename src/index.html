@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <title>Admin</title>
+    <title>Product</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
 </head>
@@ -10,7 +10,7 @@
 <noscript>
     Включите потдержку скриптов
 </noscript>
-
+<div class="window_modal_background"></div>
 <dialog class="window_modal">
     <div class="window_modal_edit"></div>
     <div class="window_modal_panel">
@@ -135,7 +135,8 @@
                 window: document.querySelector('.window_modal'),
                 edit: document.querySelector('.window_modal_edit'),
                 close: document.querySelector('.window_modal_close'),
-                save: document.querySelector('.window_modal_save')
+                save: document.querySelector('.window_modal_save'),
+                background: document.querySelector('.window_modal_background'),
             },
             get: {
                 template: {
@@ -199,7 +200,13 @@
                         let remove = item.querySelector('.cart__container_item_remove')
                         let price = item.querySelector('.cart__container_item_price')
 
-                        name.textContent = props.name
+                        console.log({
+                            name: name,
+                            amount: amount,
+                            remove: remove,
+                            price: price
+                        })
+                        // name.textContent = 'test'
                         return item
                     },
                     modal: async (element) => {
