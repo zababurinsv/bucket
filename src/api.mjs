@@ -14,7 +14,7 @@ let products = () => {
     return  new Promise(async (resolve, reject) => {
         try {
             /**
-             * Проверки на наличие данный не стал делать в данном случае
+             * Проверки на наличие данных не стал делать в данном случае
              */
             let data = (await back.get.data('https://zababurinsv.github.io/tests/07_10_2021/data.json')).Value.Goods
             let names = await back.get.data('https://zababurinsv.github.io/tests/07_10_2021/names.json')

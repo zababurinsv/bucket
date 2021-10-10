@@ -1,6 +1,5 @@
 import { events } from 'z-events'
 import template from './template.mjs'
-import cart from './cart.mjs'
 import isEmpty from "./isEmpty.mjs";
 let self = {}
 let timerId = null;
