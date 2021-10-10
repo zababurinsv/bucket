@@ -1,41 +1,70 @@
 import { events } from 'z-events'
 import template from './template.mjs'
 import cart from './cart.mjs'
+import isEmpty from "./isEmpty.mjs";
 let self = {}
-let clicks = 0
+let timerId = null;
+
 let parentNode = async (event, type) => {
-    let parent = {}
-    let isParent = true
-    if(event.target.classList.contains(type)) {
-        parent = event.target
-    } else {
-        isParent = false
-        parent =  event.target.parentNode
-        while (!parent.classList.contains(type)) {
-            parent = parent.parentNode
-        }
-    }
-    return {
-        parent: parent,
-        isParent: isParent
-    }
+   try {
+       let parent = {}
+       let isParent = true
+       if(event.target.classList.contains(type)) {
+           parent = event.target
+       } else {
+           isParent = false
+           parent =  event.target.parentNode
+           while (!parent.classList.contains(type)) {
+               parent = parent.parentNode;
+           }
+       }
+       return {
+           parent: parent,
+           isParent: isParent
+       }
+   } catch (e) {
+       console.error(e)
+       return  true
+   }
 }
 
-let timerId = null;
+let removeProductCart = async (events) => {
+    events.preventDefault()
+    let item = (await parentNode(events,'-cart__container_item')).parent
+    let id = parseFloat((item.querySelector('.-cart__container_item_productId').textContent))
+    let name = item.querySelector('.-cart__container_item_name').textContent
+    let available = parseFloat((item.querySelector('.-cart__container_item_quantity').textContent))
+    let price = parseFloat((item.querySelector('.-cart__container_item_price').textContent))
+    let idGroup = (item.querySelector('.-cart__container_item_groupId').textContent).trim()
+    if(available === 0) {
+        alert("К сожалению товар закончился");
+    } else {
+        self.worker.postMessage({
+            type: 'remove-from-cart',
+            product: {
+                idGroup: idGroup,
+                idProduct: id,
+                name: name,
+                price: price,
+                available: available
+            }
+        })
+    }
+}
 
 let closeModal = (event) => {
     event.preventDefault()
     self.modal.window.close()
     self.modal.background.style.display = "none"
-    self.worker.postMessage({isSend: true, type: "modal"})
+    self.worker.postMessage({isSend: true, type: "update"})
 }
 
 let saveModal = (event) => {
     event.preventDefault()
     self.modal.window.close()
     self.modal.background.style.display = "none"
-    events.send('/save_modal', { }, (event) => {
-        self.worker.postMessage({isSend: true, type: "modal"})
+    events.send('/save_modal', { }, (object) => {
+        self.worker.postMessage({isSend: true, type: "update-product", product: object})
     })
 }
 
@@ -47,20 +76,31 @@ let showModal = (event) => {
 
 let clickListener = (event) => {
     event.preventDefault()
+    self.worker.postMessage({isSend: false, type: "update"})
     if (!timerId) {
         timerId = setTimeout(async () => {
             timerId = clearTimeout(timerId)
-            let parent = await parentNode(event,'-products__container-item__details_item')
-            if(!parent.isParent) {
-                let name = parent.parent.querySelector('.-products__container-item__details_item_name')
-                let price = parent.parent.querySelector('.-products__container-item__details_item_price')
-                let available = parent.parent.querySelector('.-products__container-item__details_item_available')
-                price = parseFloat(price.textContent)
-                available = parseFloat(available.textContent)
-                self.get.template.cart({
-                    name: name.textContent,
-                    price: price,
-                    available: available
+            let item = await parentNode(event,'-products__container-item__details_item')
+            let group = await parentNode(event,'-products__container-item')
+            let id = parseFloat((item.parent.querySelector('.-products__container-item__details_item_id').textContent))
+            let name = item.parent.querySelector('.-products__container-item__details_item_name').textContent
+            let available = parseFloat((item.parent.querySelector('.-products__container-item__details_item_available').textContent))
+            let price = parseFloat((item.parent.querySelector('.-products__container-item__details_item_price').textContent))
+            let priceUsd = parseFloat((item.parent.querySelector('.-products__container-item__details_item_price-usd').textContent))
+            let idGroup = group.parent.querySelector('summary').textContent.trim()
+            if(available === 0) {
+                alert("К сожалению товар закончился");
+            } else {
+                self.worker.postMessage({
+                    type: 'add-cart',
+                    product: {
+                        idGroup: idGroup,
+                        idProduct: id,
+                        name: name,
+                        price: price,
+                        priceUsd: priceUsd,
+                        available: available
+                    }
                 })
             }
         }, 400);
@@ -70,7 +110,7 @@ let clickListener = (event) => {
 }
 
 let doubleClickListener = async (event) => {
-    self.worker.postMessage({isSend: false, type: "modal"})
+    self.worker.postMessage({isSend: false, type: "update"})
     self.modal.window.close()
     let parent = await parentNode(event,'-products__container-item__details_item')
     if(!parent.isParent) {
@@ -88,7 +128,7 @@ let changeCourse = (event) => {
         alert("Курс должен быть не наже 20 и не выше 80 рублей");
     } else {
         self.worker.postMessage({
-            type:"course",
+            type:"change-course",
             course: self.course.usd.value,
             isSend: false
         })
@@ -101,10 +141,19 @@ let worker = (docs = { }) => {
         // let manager = await import("https://zababurinsv.github.io/z-events/index.min.mjs");
         docs.worker.onmessage = msg => {
             if(msg.data.isSend) {
+                self.course.current.textContent = ''
+                self.course.current.textContent = msg.data.course.current
                 template("products", docs, {
                  data: msg.data.data,
-                 change: parseFloat(msg.data.course)
+                 change: parseFloat(msg.data.course.change)
                 });
+
+                if(!isEmpty(msg.data.cart)) {
+                    template("cart", docs, {
+                        cart: msg.data.cart,
+                        change: parseFloat(msg.data.course)
+                    });
+                }
             }
         }
         docs.worker.onerror = function(event) {
@@ -139,6 +188,10 @@ let course = (docs) => {
     docs.panel.course.addEventListener('click', changeCourse)
 }
 
+let removeProduct = (item) => {
+    item.addEventListener('click', removeProductCart)
+}
+
 export default {
     worker: worker,
     product: {
@@ -150,5 +203,11 @@ export default {
     },
     modal: {
         main: modal
+    },
+    cart: {
+      remove: removeProduct
+    },
+    utils: {
+        parent: parentNode
     }
 }

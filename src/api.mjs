@@ -45,7 +45,7 @@ let products = () => {
                         available:  products[id][item].P,
                         price: {
                             usd: products[id][item].C,
-                            rub: calc.convert(products[id][item].C)
+                            rub: calc.convert.usd(products[id][item].C)
                         },
                         group: products[id][item].G,
                         B: products[id][item].B,
@@ -62,9 +62,50 @@ let products = () => {
     })
 }
 
+let store = (data) => {
+    return  new Promise(async (resolve, reject) => {
+        try {
+            let result = data
+            for(let groupId in result){
+                for(let product of result[groupId]) {
+                    product.price.rub = calc.convert.usd(product.price.usd)
+                }
+            }
+            resolve(result)
+        }catch (e) {
+            console.error(e)
+            resolve(e)
+        }
+    })
+}
+
+let cart = (data) => {
+    return  new Promise(async (resolve, reject) => {
+        try {
+            let result = data
+            if(!isEmpty(data)) {
+                result = data
+                for(let type in result) {
+                    for(let key in result[type]) {
+                        for(let item of result[type][key]) {
+                            item.price = calc.convert.usd(item.priceUsd)
+                        }
+                    }
+                }
+            }
+            resolve(result)
+        } catch (e) {
+            console.error(e)
+            resolve(e)
+        }
+    })
+}
+
 export default {
     get: {
-        products: products
+        products: products,
+        store: store,
+        cart: cart,
     },
     set: {
      course: course

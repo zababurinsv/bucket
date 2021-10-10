@@ -56,6 +56,7 @@ body {
 }
 
 #panel {
+    display: flex;
     background: azure;
     width: min-content;
     margin: 0.5vw;
@@ -76,7 +77,12 @@ form {
 .course__button {
     font-size: 1vw;
 }
-
+.course__current {
+    display: flex;
+    align-self: center;
+    box-sizing: border-box;
+    padding: 1vw;
+}
 .course {
     width: 100%;
     box-sizing: border-box;
@@ -90,6 +96,9 @@ form {
 #mocha-report {
     width: 98vw;
 }
+.-cart__container_item_remove {
+    cursor: pointer;
+}
 
 .-cart__footer {
     display: flex;
@@ -97,6 +106,7 @@ form {
     justify-content: right;
     box-sizing: border-box;
     padding: 1vw;
+    margin-top: 0.5vw;
 }
 
 .-cart__footer_total_price::after {
@@ -187,7 +197,7 @@ summary {
     flex-direction: column;
 }
 
-.-cart__header {
+.-cart__header, .-cart__container_item {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
@@ -195,22 +205,28 @@ summary {
     padding: 1vw;
     border-bottom: 0.2vw solid rgba(0, 0, 0, 0.33);
     font-size: 1.5vw;
+    margin-bottom: 0.5vw;
+}
+
+.-cart__container {
+    display: flex;
+    flex-direction: column;
 }
 
 .-cart__container_item_name {
-        flex-grow: 0.8;
+        width: 40vw;
 }
 
-.-cart__container_item_amount {
-    flex-grow: 0.5;
+.-cart__container_item_quantity {
+    width: 30vw;
 }
 
 .-cart__container_item_price {
-    flex-grow: 0.2;
+    width: 10vw;
 }
 
-.-cart__container_item_delete {
-    flex-grow: 0.1;
+.-cart__container_item_remove {
+    width: 5vw;
 }
 
 .-cart__container {

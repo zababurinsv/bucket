@@ -2,13 +2,8 @@ import listener from './listener.mjs'
 export default async ( type=" ", docs = { }, data = { } ) => {
 	switch(type) {
 		case'cart':
-			for(let i = 0; i < 4; i++) {
-				let item = await docs.get.template.cart({
-					column: 4,
-					position: i 
-				})
-				docs.cart.container.appendChild(item)
-			}
+			docs.cart.container.innerHTML = ''
+			await docs.get.template.cart(data.cart)
 			break;
 		case'products':
 			console.log()

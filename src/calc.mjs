@@ -18,8 +18,15 @@ function convertUsdToRub(usd) {
     return parseFloat((usd * course.current).toFixed(2))
 }
 
+function convertRubToUsd(rub) {
+    return parseFloat((rub / course.current).toFixed(2))
+}
+
 export default {
-    convert: convertUsdToRub,
+    convert: {
+        usd: convertUsdToRub,
+        rub: convertRubToUsd
+    },
     set: {
         course: changeCourse
     },
