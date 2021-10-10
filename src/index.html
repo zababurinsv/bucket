@@ -222,7 +222,7 @@
                                 total += total + props[type][id].length * props[type][id][0].price
                                 productId.textContent = id
                                 groupId.textContent = type
-                                price.textContent = props[type][id][0].price
+                                price.textContent = (props[type][id][0].price * props[type][id].length).toFixed(2)
                                 name.textContent = props[type][id][0].name
                                 quantity.textContent = props[type][id].length
                                 listener.cart.remove(remove)
