@@ -111,13 +111,15 @@ let addToCart = (event) => {
 let doubleClickListener = async (event) => {
     self.worker.postMessage({isSend: false, type: "update"})
     self.modal.window.close()
-    let parent = await parentNode(event,'-products__container-item__details_item')
-    if(!parent.isParent) {
-        self.get.template.modal({
-            target: event.target,
-            parentNode: parent
-        })
-        showModal()
+    if(event.target.className.indexOf('wrapper') === -1) {
+        let parent = await parentNode(event,'-products__container-item__details_item')
+        if(!parent.isParent) {
+            self.get.template.modal({
+                target: event.target,
+                parentNode: parent
+            })
+            showModal()
+        }
     }
 }
 
