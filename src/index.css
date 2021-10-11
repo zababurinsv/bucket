@@ -60,6 +60,7 @@ body {
     background: azure;
     width: max-content;
     margin: 0.5vw;
+    font-size: 1.2vw;
 }
 
 .course__status {
