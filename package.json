@@ -7,17 +7,27 @@
   "main": "./dist/index.mjs",
   "author": "Zababurin Sergey",
   "license": "GPL-3.0-only",
+  "targets": {
+    "main": false,
+    "module": {
+      "includeNodeModules": true,
+      "optimize": true
+    },
+    "docs": {
+      "source": "./frontend/src/index.html"
+    }
+  },
   "config": {
-    "port": 8449,
-    "root": "src"
+    "html": "./frontend/src/index.html",
+    "mjs": "./frontend/src/index.mjs",
+    "port": 6999
   },
   "scripts": {
-    "start": "nodemon server.mjs",
-    "dev": "parcel ./$npm_package_config_root/index.html -p $npm_package_config_port --cache-dir ./.parcel-cache",
-    "build": "parcel build",
-    "build:html": "parcel build src/index.html --dist-dir ./docs",
+    "dev": "parcel $npm_package_config_html --port $npm_package_config_port --no-source-maps --dist-dir ./docs ",
+    "build:html": "parcel build --target docs --no-source-maps --dist-dir ./docs ",
+    "build": "parcel build $npm_package_config_mjs --no-source-maps --dist-dir ./dist ",
     "kill": "kill $(lsof -t -i:$npm_package_config_port)",
-    "clean": "rimraf ./.parcel-cache"
+    "clean:parcel": "find . -name \".parcel-cache\" -exec rm -rf '{}' +; "
   },
   "dependencies": {
     "@parcel/reporter-dev-server": "^2.0.0-alpha.3",
