@@ -23,7 +23,7 @@
     "port": 6999
   },
   "scripts": {
-    "dev": "parcel $npm_package_config_html --port $npm_package_config_port --no-source-maps --dist-dir ./docs ",
+    "dev": "parcel $npm_package_config_html --port $npm_package_config_port --cache-dir ./.parcel-cache  --no-source-maps --dist-dir ./docs ",
     "build:html": "parcel build --target docs --no-source-maps --dist-dir ./docs ",
     "build": "parcel build $npm_package_config_mjs --no-source-maps --dist-dir ./dist ",
     "kill": "kill $(lsof -t -i:$npm_package_config_port)",
